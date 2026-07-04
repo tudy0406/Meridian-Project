@@ -1,0 +1,19 @@
+# .NET
+BACKEND/**/bin/
+BACKEND/**/obj/
+*.user
+
+# Node / Vite
+FRONTEND/node_modules/
+FRONTEND/dist/
+FRONTEND/.env.local
+
+# IDE / OS
+.vs/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Secrets — do not commit real connection strings / JWT secrets
+**/appsettings.*.local.json
+ACCOUNTS.txt

@@ -1,0 +1,42 @@
+# Pin the Compose project name so the data volume stays 'meridian_meridian-pgdata'
+# regardless of where this file lives or which directory it is run from.
+name: meridian
+
+services:
+  db:
+    image: postgres:17
+    container_name: meridian-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: meridian
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - meridian-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d meridian"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Optional web UI for inspecting the database — browse to  
+  # (login: admin@meridian.com / admin). Comment out if not needed.
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: meridian-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@meridian.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  meridian-pgdata:

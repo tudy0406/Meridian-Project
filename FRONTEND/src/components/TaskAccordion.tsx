@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { tasksApi } from '../api/endpoints';
 import type { EmployeeTask, EmployeeTaskDetail, EmployeeTaskStatus } from '../types';
 import { formatDate, formatDateTime } from '../utils/datetime';
@@ -69,7 +70,12 @@ export function TaskAccordion({
 
               <div className="detail-meta">
                 <span>
-                  <strong>Assigned by:</strong> {detail.assignedByName ?? '—'}
+                  <strong>Assigned by:</strong>{' '}
+                  {detail.assignedByName ? (
+                    <Link to={`/profile/${detail.assignedById}`}>{detail.assignedByName}</Link>
+                  ) : (
+                    '—'
+                  )}
                 </span>
                 <span>
                   <strong>Assigned:</strong> {formatDate(detail.assignedAt)}
